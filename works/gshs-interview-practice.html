@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경남과고 면접 연습 마스터 - GSHS Interview Master</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/fontawesome/6.4.0/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- KaTeX for Math Expressions -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                        },
+                        cyanAccent: '#06b6d4',
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.25s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        canvas {
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid font-bold text-white text-xl">🎓</i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-blue-200 bg-clip-text text-transparent">
+                        경남과고 면접 연습 마스터
+                    </h1>
+                    <p class="text-xs text-cyan-400 font-medium">Gyeongnam Science High School Interview Prep</p>
+                </div>
+            </div>
+
+            <!-- Global Nav Menu -->
+            <nav class="hidden md:flex items-center space-x-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-blue-400 bg-slate-800 shadow-sm">
+                    <i class="fa-solid fa-chart-line mr-1.5"></i>대시보드
+                </button>
+                <button onclick="switchTab('document-interview')" id="nav-document-interview" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-file-lines mr-1.5"></i>소집면담 (서류)
+                </button>
+                <button onclick="switchTab('creative-interview')" id="nav-creative-interview" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-flask mr-1.5"></i>소집면접 (구상/면접)
+                </button>
+                <button onclick="switchTab('report')" id="nav-report" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-square-poll-vertical mr-1.5"></i>AI 평가 보고서
+                </button>
+                <button onclick="switchTab('history')" id="nav-history" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-bookmark mr-1.5"></i>오답노트
+                </button>
+            </nav>
+
+            <!-- Quick Action Badges -->
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center space-x-2 bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-lg text-xs font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-slate-300">연습 모드 준비 완료</span>
+                </div>
+                <button onclick="openHelpModal()" class="p-2 rounded-lg text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-circle-question text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu Bar -->
+        <div class="md:hidden flex items-center justify-around mt-3 pt-2 border-t border-slate-800/60 text-xs">
+            <button onclick="switchTab('dashboard')" class="text-blue-400 font-semibold py-1">대시보드</button>
+            <button onclick="switchTab('document-interview')" class="text-slate-400 hover:text-white py-1">소집면담</button>
+            <button onclick="switchTab('creative-interview')" class="text-slate-400 hover:text-white py-1">소집면접</button>
+            <button onclick="switchTab('report')" class="text-slate-400 hover:text-white py-1">평가리포트</button>
+            <button onclick="switchTab('history')" class="text-slate-400 hover:text-white py-1">오답노트</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-8">
+
+        <!-- ================= TAB 1: DASHBOARD ================= -->
+        <section id="tab-dashboard" class="tab-content space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900/80 via-indigo-900/60 to-slate-900 border border-blue-500/20 p-6 sm:p-10 shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="max-w-3xl space-y-4">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold">
+                        <i class="fa-solid fa-award"></i>
+                        <span>경남과학고등학교 합격 대비 최적화 파이널 시스템</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+                        실전 소집면담과 구상실 창의 소집면접을 <br class="hidden sm:inline">
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">AI 입학사정관</span>과 완벽 대비하세요.
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        생활기록부·자기소개서 기반 verification 질문부터 구상실 캔버스 수식 풀이, 10분 실전 발표 및 매서운 꼬리질문 평가까지 한 곳에서 연습할 수 있습니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Analytics Quick Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-panel p-5 rounded-2xl border border-slate-800">
+                    <div class="flex justify-between items-center text-slate-400 text-xs font-medium mb-2">
+                        <span>총 연습 문제</span>
+                        <i class="fa-solid fa-circle-check text-blue-400 text-base"></i>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white" id="stat-completed-count">12개</div>
+                    <p class="text-xs text-emerald-400 mt-1 font-medium"><i class="fa-solid fa-arrow-up mr-1"></i>이번 주 +4개 완료</p>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-slate-800">
+                    <div class="flex justify-between items-center text-slate-400 text-xs font-medium mb-2">
+                        <span>누적 연습 시간</span>
+                        <i class="fa-solid fa-stopwatch text-cyan-400 text-base"></i>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white" id="stat-practice-time">145분</div>
+                    <p class="text-xs text-cyan-400 mt-1 font-medium">평균 구상 시간 18분</p>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-slate-800">
+                    <div class="flex justify-between items-center text-slate-400 text-xs font-medium mb-2">
+                        <span>평균 논리성 점수</span>
+                        <i class="fa-solid fa-brain text-purple-400 text-base"></i>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white">88<span class="text-sm font-normal text-slate-400">/100</span></div>
+                    <p class="text-xs text-emerald-400 mt-1 font-medium">상위 12% 수준 레벨</p>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-slate-800">
+                    <div class="flex justify-between items-center text-slate-400 text-xs font-medium mb-2">
+                        <span>수학·과학 개념 정확도</span>
+                        <i class="fa-solid fa-atom text-emerald-400 text-base"></i>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white">92<span class="text-sm font-normal text-slate-400">/100</span></div>
+                    <p class="text-xs text-emerald-400 mt-1 font-medium">우수한 개념 적용력</p>
+                </div>
+            </div>
+
+            <!-- Mode Selection Hub -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-compass text-blue-400"></i> 연습 모드 선택
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Card 1: Document Interview -->
+                    <div onclick="switchTab('document-interview')" class="glass-card p-6 rounded-2xl border border-slate-800 cursor-pointer group hover:border-blue-500/50 relative overflow-hidden">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-2xl group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-id-card"></i>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">1~2단계 대비</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">📄 서류 기반 소집면담 모드</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                            자기소개서 및 학생부를 입력하여 AI가 예측하는 날카로운 탐구 검증 질문을 추출합니다. TTS 음성 질문과 STT 답변을 직접 연습해 보세요.
+                        </p>
+                        <div class="flex items-center text-xs font-semibold text-blue-400 group-hover:translate-x-1 transition-transform">
+                            <span>소집면담 시작하기</span>
+                            <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Creative Math/Science Interview -->
+                    <div onclick="switchTab('creative-interview')" class="glass-card p-6 rounded-2xl border border-slate-800 cursor-pointer group hover:border-cyan-500/50 relative overflow-hidden">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-2xl group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-drafting-compass"></i>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">3단계 대비</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">🧪 창의 융합 소집면접 (구상실+면접실)</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                            30분 구상실 실전 캔버스 필기 노트 작성 후, 10분 면접실에서 직접 발표하고 AI 입학사정관의 연속 꼬리질문에 답하는 시뮬레이션입니다.
+                        </p>
+                        <div class="flex items-center text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">
+                            <span>소집면접 연습 시작하기</span>
+                            <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gyeongnam Sci-High Interview Guide Accordion -->
+            <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+                <h4 class="font-bold text-base text-white flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-400"></i> 경남과고 면접 핵심 평가 포인트
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+                    <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
+                        <div class="font-bold text-blue-300 mb-1">1. 단순 암기 지양, 원리 이해</div>
+                        <p class="text-slate-400">공식을 단순히 외워 적용하는 답변보다는 왜 그러한 법칙이 성립하는지 근본적인 물리/수학적 원리를 설명해야 합니다.</p>
+                    </div>
+                    <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
+                        <div class="font-bold text-cyan-300 mb-1">2. 논리적 단계와 반례 고려</div>
+                        <p class="text-slate-400">주장의 근거를 단계별로 명확히 제시하고, 발생할 수 있는 예외 조건이나 조건 변화에 따른 영향을 함께 논증하세요.</p>
+                    </div>
+                    <div class="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
+                        <div class="font-bold text-emerald-300 mb-1">3. 태도와 태클 반응 (꼬리질문)</div>
+                        <p class="text-slate-400">면접관의 압박 및 꼬리질문에 당황하지 않고, 자신의 기존 답변을 논리적으로 보완하거나 오류를 유연하게 인정하는 태도가 중요합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: DOCUMENT INTERVIEW ================= -->
+        <section id="tab-document-interview" class="tab-content hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-file-pen text-blue-400"></i> 서류 기반 소집면담 (자소서 / 생기부)
+                    </h2>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-1">자기소개서 작성 내용을 입력하거나 기본 예시 데이터를 활용하여 검증 질문을 생성하세요.</p>
+                </div>
+                <button onclick="loadSamplePersonalStatement()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-blue-300 transition flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 경남과고 합격자 예시 자소서 불러오기
+                </button>
+            </div>
+
+            <!-- Input Form & Question Generator -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left: Statement Input -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
+                        <label class="block font-semibold text-sm text-slate-200">
+                            자기소개서 / 탐구활동 내용 입력
+                        </label>
+                        <textarea id="personal-statement-input" rows="12" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition leading-relaxed resize-none" placeholder="자기소개서 수학/과학 탐구 주제, 실험 내용, 독서 및 동기 항목을 입력하세요..."></textarea>
+                        
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span id="char-count">0 자</span>
+                            <span class="text-blue-400">AI 질문 5~8개 자동추출</span>
+                        </div>
+
+                        <button onclick="generateDocumentQuestions()" id="btn-generate-doc-q" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-robot"></i>
+                            <span>AI 소집면담 검증 질문 생성</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Generated Questions List & Live Q&A Practice -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-800 min-h-[480px] flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                                <h3 class="font-bold text-slate-200 text-base flex items-center gap-2">
+                                    <i class="fa-solid fa-clipboard-question text-cyan-400"></i> 생성된 검증 질문 목록
+                                </h3>
+                                <span id="doc-q-badge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 font-mono">0개 준비됨</span>
+                            </div>
+
+                            <!-- Question Cards Container -->
+                            <div id="doc-questions-container" class="space-y-3">
+                                <div class="text-center py-16 text-slate-500 text-sm">
+                                    <i class="fa-solid fa-file-circle-question text-4xl mb-3 block opacity-40"></i>
+                                    왼쪽에 자기소개서 내용을 입력하고 <br>[AI 질문 생성] 버튼을 눌러주세요.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q&A Answer Practice Box -->
+                        <div id="doc-qa-box" class="mt-6 pt-4 border-t border-slate-800 hidden space-y-3">
+                            <div class="p-3 bg-blue-950/40 border border-blue-800/40 rounded-xl flex items-start justify-between">
+                                <div>
+                                    <span class="text-xs text-blue-400 font-semibold block">선택된 면담 질문</span>
+                                    <p id="current-doc-q-text" class="text-sm font-bold text-white mt-1">질문 내용이 표시됩니다.</p>
+                                </div>
+                                <button onclick="speakQuestionText()" class="px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white flex items-center gap-1 transition shrink-0 ml-2">
+                                    <i class="fa-solid fa-volume-high"></i> TTS 읽기
+                                </button>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">내 답변 (STT 음성 입력 또는 텍스트)</label>
+                                <div class="relative">
+                                    <textarea id="doc-answer-input" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition resize-none" placeholder="답변을 음성으로 녹음하거나 직접 입력하세요..."></textarea>
+                                    <button onclick="toggleSTT('doc-answer-input')" id="btn-stt-doc" class="absolute right-3 bottom-3 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-slate-700 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-microphone text-red-400 animate-pulse hidden" id="stt-mic-icon"></i>
+                                        <span id="stt-btn-text">음성 녹음 시작</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button onclick="submitDocAnswer()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> 답변 제출 및 AI 꼬리질문 평가
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: CREATIVE INTERVIEW (Prep & Presentation) ================= -->
+        <section id="tab-creative-interview" class="tab-content hidden space-y-8">
+            <!-- Stage Selector & Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-cyan-400"></i> 창의 융합 소집면접
+                    </h2>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-1">경남과고 3단계 실전: 구상실(30분) 수식 및 아이디어 필기 → 면접실(10분) 발표 및 AI 꼬리질문</p>
+                </div>
+
+                <!-- Toggle Steps -->
+                <div class="flex items-center space-x-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                    <button onclick="setCreativeSubStep('prep')" id="subnav-prep" class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-cyan-600 text-white">
+                        1단계: 구상실 (Prep Canvas)
+                    </button>
+                    <button onclick="setCreativeSubStep('present')" id="subnav-present" class="px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white">
+                        2단계: 면접실 (Presentation)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Selection Selector Bar -->
+            <div class="glass-panel p-4 rounded-2xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center space-x-3 w-full md:w-auto">
+                    <span class="text-xs font-bold text-slate-400 shrink-0">기출/예상 문제:</span>
+                    <select id="creative-question-select" onchange="loadSelectedCreativeQuestion()" class="bg-slate-900 border border-slate-700 text-white text-xs sm:text-sm rounded-xl px-3 py-2 w-full focus:outline-none focus:border-cyan-500">
+                        <option value="math-1">[수학 1] 프랙탈 구조와 점화식 표현 (경남과고 기출 빈출)</option>
+                        <option value="math-2">[수학 2] 정답이 여러 개 존재하는 도형 조건의 수학적 논증</option>
+                        <option value="sci-1">[과학 1] 지구온난화 대응을 위한 지구공학적 대안 및 과학 원리</option>
+                        <option value="sci-2">[과학 2] 생명체 신진대사와 엔트로피 및 인공장치 모사</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2 shrink-0">
+                    <button onclick="startPrepTimer()"
